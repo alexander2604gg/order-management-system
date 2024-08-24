@@ -1,7 +1,7 @@
 package com.alexandersaul.orders.service.impl;
 
 import com.alexandersaul.orders.dto.order.OrderRequestDTO;
-import com.alexandersaul.orders.dto.order.OrderResponseDTO;
+import com.alexandersaul.orders.dto.order.UpdateOrderStatusDTO;
 import com.alexandersaul.orders.entity.Order;
 import com.alexandersaul.orders.mapper.OrderMapper;
 import com.alexandersaul.orders.repository.OrderRepository;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,6 +26,7 @@ public class OrderService implements IOrderService {
         Order order = orderMapper.toEntity(orderRequestDTO);
         order.setCreatedBy("Alexander Saul");
         order.setCreatedAt(LocalDateTime.now());
+        order.setStatus("Pending");
         orderRepository.save(order);
     }
 
@@ -37,6 +37,18 @@ public class OrderService implements IOrderService {
         if (orderOptional.isPresent()) {
             Order order = orderOptional.get();
             order.setTotalAmount(totalAmount);
+            orderRepository.save(order);
+        }
+    }
+
+    @Override
+    public void updateOrderStatus(Long id , UpdateOrderStatusDTO orderUpdateStatusDTO) {
+
+        Optional<Order> orderOptional = orderRepository.findById(id);
+
+        if (orderOptional.isPresent()){
+            Order order = orderOptional.get();
+            order.setStatus(orderUpdateStatusDTO.getStatus());
             orderRepository.save(order);
         }
     }
