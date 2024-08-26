@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -46,12 +47,24 @@ public class OrderDetailService implements IOrderDetailService {
         OrderResponseDTO orderResponseDTO = orderService.findById(orderId);
 
         if (orderResponseDTO != null) {
+            orderDetailList.forEach(orderDetail -> {
+                orderDetail.setCreatedAt(LocalDateTime.now());
+                orderDetail.setCreatedBy("Alexander");
+            });
             orderDetailRepository.saveAll(orderDetailList);
             BigDecimal totalAmount = calculateTotalAmount(orderDetailList);
             orderService.updateTotalAmount(orderId, totalAmount);
         }
     }
 
+    @Override
+    public boolean deleteOrderDetail(Long id) {
+        OrderDetail orderDetail = orderDetailRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("OrderDetail" , "orderId" , String.valueOf(id))
+        );
+        orderDetailRepository.deleteById(orderDetail.getOrderDetailId());
+        return true;
+    }
 
 
     public BigDecimal calculateTotalAmount (List<OrderDetail> orderDetailList) {

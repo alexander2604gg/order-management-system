@@ -45,9 +45,8 @@ public class OrderController {
         } else {
             return ResponseEntity
                     .status(HttpStatus.EXPECTATION_FAILED)
-                    .body(new ResponseDTO(OrderConstants.STATUS_417, OrderConstants.MESSAGE_417_DELETE));
+                    .body(new ResponseDTO(OrderConstants.STATUS_500, OrderConstants.MESSAGE_500_DELETE));
         }
     }
-
 
 }

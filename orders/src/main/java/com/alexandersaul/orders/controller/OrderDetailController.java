@@ -1,5 +1,6 @@
 package com.alexandersaul.orders.controller;
 
+import com.alexandersaul.orders.constants.OrderConstants;
 import com.alexandersaul.orders.constants.OrderDetailConstants;
 import com.alexandersaul.orders.dto.ResponseDTO;
 import com.alexandersaul.orders.dto.orderdetail.OrderDetailRequestDTO;
@@ -7,10 +8,7 @@ import com.alexandersaul.orders.service.impl.OrderDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,5 +26,21 @@ public class OrderDetailController {
                 .status(HttpStatus.CREATED)
                 .body(new ResponseDTO(OrderDetailConstants.STATUS_201 , OrderDetailConstants.MESSAGE_201));
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<ResponseDTO> deleteOrderDetail (@PathVariable Long id) {
+        boolean isDelete = orderDetailService.deleteOrderDetail(id);
+        if (isDelete){
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(new ResponseDTO(OrderConstants.STATUS_200 , OrderConstants.MESSAGE_200));
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.EXPECTATION_FAILED)
+                    .body(new ResponseDTO(OrderConstants.STATUS_500, OrderConstants.MESSAGE_500_DELETE));
+        }
+
+    }
+
 
 }
