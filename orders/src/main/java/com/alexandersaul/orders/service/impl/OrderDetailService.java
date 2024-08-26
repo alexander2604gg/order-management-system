@@ -45,12 +45,11 @@ public class OrderDetailService implements IOrderDetailService {
 
         OrderResponseDTO orderResponseDTO = orderService.findById(orderId);
 
-        if (orderResponseDTO!=null){
+        if (orderResponseDTO != null) {
             orderDetailRepository.saveAll(orderDetailList);
             BigDecimal totalAmount = calculateTotalAmount(orderDetailList);
             orderService.updateTotalAmount(orderId, totalAmount);
         }
-
     }
 
 

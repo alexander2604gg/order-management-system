@@ -35,4 +35,19 @@ public class OrderController {
                 .body(new ResponseDTO(OrderConstants.STATUS_200 , OrderConstants.MESSAGE_200));
     }
 
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<ResponseDTO> deleteOrder (@PathVariable Long id) {
+        boolean isDeleted = orderService.deleteOrder(id);
+        if (isDeleted){
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(new ResponseDTO(OrderConstants.STATUS_200,OrderConstants.MESSAGE_200));
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.EXPECTATION_FAILED)
+                    .body(new ResponseDTO(OrderConstants.STATUS_417, OrderConstants.MESSAGE_417_DELETE));
+        }
+    }
+
+
 }

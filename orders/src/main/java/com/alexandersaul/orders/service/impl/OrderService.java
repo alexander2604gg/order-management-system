@@ -56,7 +56,7 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public OrderResponseDTO findById(long id) {
+    public OrderResponseDTO findById(Long id) {
         Optional<Order> orderOptional  = orderRepository.findById(id);
         if (orderOptional.isEmpty()){
             throw new ResourceNotFoundException("Order","orderId",String.valueOf(id));
@@ -64,5 +64,12 @@ public class OrderService implements IOrderService {
         return orderMapper.toDTO(orderOptional.get());
     }
 
-
+    @Override
+    public boolean deleteOrder(Long id) {
+        Order order = orderRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Order" , "orderId" , String.valueOf(id))
+        );
+        orderRepository.deleteById(order.getOrderId());
+        return true;
+    }
 }

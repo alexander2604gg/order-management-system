@@ -12,5 +12,6 @@ public interface IOrderService {
     void createOrder (OrderRequestDTO orderRequestDTO);
     void updateTotalAmount (Long idOrder , BigDecimal totalAmount);
     void updateOrderStatus ( Long id , UpdateOrderStatusDTO orderUpdateStatusDTO);
-    OrderResponseDTO findById (long id);
+    OrderResponseDTO findById (Long id);
+    boolean deleteOrder (Long id);
 }
