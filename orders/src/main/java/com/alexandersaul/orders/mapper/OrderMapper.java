@@ -1,6 +1,7 @@
 package com.alexandersaul.orders.mapper;
 
 import com.alexandersaul.orders.dto.order.OrderRequestDTO;
+import com.alexandersaul.orders.dto.order.OrderResponseDTO;
 import com.alexandersaul.orders.entity.Order;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -16,5 +17,6 @@ public interface OrderMapper {
     @Mapping(target = "totalAmount", ignore = true)
     @Mapping(target = "status", ignore = true)
     Order toEntity (OrderRequestDTO orderRequestDTO);
+    OrderResponseDTO toDTO (Order order);
 
 }

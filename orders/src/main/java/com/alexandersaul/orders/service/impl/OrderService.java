@@ -1,8 +1,10 @@
 package com.alexandersaul.orders.service.impl;
 
 import com.alexandersaul.orders.dto.order.OrderRequestDTO;
+import com.alexandersaul.orders.dto.order.OrderResponseDTO;
 import com.alexandersaul.orders.dto.order.UpdateOrderStatusDTO;
 import com.alexandersaul.orders.entity.Order;
+import com.alexandersaul.orders.exception.ResourceNotFoundException;
 import com.alexandersaul.orders.mapper.OrderMapper;
 import com.alexandersaul.orders.repository.OrderRepository;
 import com.alexandersaul.orders.service.IOrderService;
@@ -52,4 +54,15 @@ public class OrderService implements IOrderService {
             orderRepository.save(order);
         }
     }
+
+    @Override
+    public OrderResponseDTO findById(long id) {
+        Optional<Order> orderOptional  = orderRepository.findById(id);
+        if (orderOptional.isEmpty()){
+            throw new ResourceNotFoundException("Order","orderId",String.valueOf(id));
+        }
+        return orderMapper.toDTO(orderOptional.get());
+    }
+
+
 }
