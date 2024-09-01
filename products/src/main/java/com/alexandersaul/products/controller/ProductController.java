@@ -3,6 +3,7 @@ package com.alexandersaul.products.controller;
 import com.alexandersaul.products.constants.ProductConstants;
 import com.alexandersaul.products.dto.ResponseDTO;
 import com.alexandersaul.products.dto.product.ProductRequestDTO;
+import com.alexandersaul.products.service.IProductService;
 import com.alexandersaul.products.service.impl.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class ProductController {
 
     @Autowired
-    private ProductService productService;
+    private IProductService productService;
 
     @PostMapping("/create")
     public ResponseEntity<ResponseDTO> createProduct (@RequestBody ProductRequestDTO productRequestDTO) {
