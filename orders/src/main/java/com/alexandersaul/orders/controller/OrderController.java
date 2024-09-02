@@ -5,8 +5,6 @@ import com.alexandersaul.orders.dto.ResponseDTO;
 import com.alexandersaul.orders.dto.order.OrderRequestDTO;
 import com.alexandersaul.orders.dto.order.UpdateOrderStatusDTO;
 import com.alexandersaul.orders.service.IOrderService;
-import com.alexandersaul.orders.service.impl.OrderService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
