@@ -7,6 +7,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="configServer" />
       </profile>
       <profile name="Annotation profile for inventory" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -25,6 +26,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="configServer" options="-parameters" />
       <module name="inventory" options="-parameters" />
       <module name="orders" options="-parameters" />
       <module name="products" options="-parameters" />

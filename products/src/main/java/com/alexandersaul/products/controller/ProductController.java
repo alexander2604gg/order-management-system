@@ -2,7 +2,9 @@ package com.alexandersaul.products.controller;
 
 import com.alexandersaul.products.constants.ProductConstants;
 import com.alexandersaul.products.dto.ResponseDTO;
+import com.alexandersaul.products.dto.category.CategoryResponseDTO;
 import com.alexandersaul.products.dto.product.ProductRequestDTO;
+import com.alexandersaul.products.dto.product.ProductResponseDTO;
 import com.alexandersaul.products.service.IProductService;
 import com.alexandersaul.products.service.impl.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +12,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/product")
 public class ProductController {
 
     @Autowired
     private IProductService productService;
+
+    @GetMapping("/resource")
+    public ResponseEntity<List<ProductResponseDTO>> getProductsByCategoryId (@RequestParam Long categoryId) {
+        List<ProductResponseDTO> productResponseDTOS = productService.getProductByCategoryId(categoryId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(productResponseDTOS);
+    }
 
     @PostMapping("/create")
     public ResponseEntity<ResponseDTO> createProduct (@RequestBody ProductRequestDTO productRequestDTO) {

@@ -4,7 +4,7 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/ordersDB
+    url: jdbc:mysql://mysql-orders-container/ordersDB
     username: root
     password: alexander
 

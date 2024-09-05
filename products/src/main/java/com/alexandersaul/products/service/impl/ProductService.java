@@ -1,6 +1,7 @@
 package com.alexandersaul.products.service.impl;
 
 import com.alexandersaul.products.dto.product.ProductRequestDTO;
+import com.alexandersaul.products.dto.product.ProductResponseDTO;
 import com.alexandersaul.products.entity.Brand;
 import com.alexandersaul.products.entity.Category;
 import com.alexandersaul.products.entity.Product;
@@ -13,6 +14,7 @@ import com.alexandersaul.products.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class ProductService implements IProductService {
@@ -26,6 +28,12 @@ public class ProductService implements IProductService {
     @Autowired
     private ProductMapper productMapper;
 
+
+    @Override
+    public List<ProductResponseDTO> getProductByCategoryId(Long categoryId) {
+        List<Product> products = (List<Product>) productRepository.findProductsByCategoryId(categoryId);
+        return productMapper.toDTOs(products);
+    }
 
     @Override
     public void createProduct(ProductRequestDTO productRequestDTO) {

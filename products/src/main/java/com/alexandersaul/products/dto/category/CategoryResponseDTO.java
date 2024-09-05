@@ -1,2 +1,15 @@
-package com.alexandersaul.products.dto.category;public class CategoryResponse {
+package com.alexandersaul.products.dto.category;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter @Setter
+@AllArgsConstructor @NoArgsConstructor
+public class CategoryResponseDTO {
+
+    private Long categoryId;
+    private String name;
+
 }

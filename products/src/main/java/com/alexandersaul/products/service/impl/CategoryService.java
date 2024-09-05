@@ -1,6 +1,7 @@
 package com.alexandersaul.products.service.impl;
 
 import com.alexandersaul.products.dto.category.CategoryRequestDTO;
+import com.alexandersaul.products.dto.category.CategoryResponseDTO;
 import com.alexandersaul.products.entity.Category;
 import com.alexandersaul.products.exception.ResourceNotFoundException;
 import com.alexandersaul.products.mapper.CategoryMapper;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class CategoryService implements ICategoryService {
@@ -18,6 +20,13 @@ public class CategoryService implements ICategoryService {
     private CategoryRepository categoryRepository;
     @Autowired
     private CategoryMapper categoryMapper;
+
+    @Override
+    public List<CategoryResponseDTO> getCategories() {
+        List <Category> categories = (List<Category>) categoryRepository.findAll();
+        List<CategoryResponseDTO> categoryResponseDTOS = categoryMapper.toDTOs(categories);
+        return categoryResponseDTOS;
+    }
 
     @Override
     public void createCategory(CategoryRequestDTO categoryRequestDTO) {
