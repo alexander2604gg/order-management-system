@@ -1,13 +1,4 @@
 spring:
-  application:
-    name: orders
-
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/inventoryDB
-    username: root
-    password: alexander
-
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
@@ -21,3 +12,4 @@ spring:
 
 server:
   port: 9090
+

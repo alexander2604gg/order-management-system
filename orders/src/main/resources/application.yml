@@ -1,13 +1,4 @@
 spring:
-  application:
-    name: orders
-
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://mysql-orders-container/ordersDB
-    username: root
-    password: alexander
-
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:

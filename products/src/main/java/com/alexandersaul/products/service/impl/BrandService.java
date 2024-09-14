@@ -1,6 +1,7 @@
 package com.alexandersaul.products.service.impl;
 
 import com.alexandersaul.products.dto.brand.BrandRequestDTO;
+import com.alexandersaul.products.dto.brand.BrandResponseDTO;
 import com.alexandersaul.products.entity.Brand;
 import com.alexandersaul.products.exception.ResourceNotFoundException;
 import com.alexandersaul.products.mapper.BrandMapper;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class BrandService implements IBrandService {
@@ -18,6 +20,12 @@ public class BrandService implements IBrandService {
     private BrandRepository brandRepository;
     @Autowired
     private BrandMapper brandMapper;
+
+    @Override
+    public List<BrandResponseDTO> getAllBrands() {
+        List<Brand> brands = (List<Brand>) brandRepository.findAll();
+        return brandMapper.toDTOs(brands);
+    }
 
     @Override
     public void createBrand(BrandRequestDTO brandRequestDTO) {

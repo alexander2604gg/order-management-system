@@ -1,0 +1,48 @@
+services:
+  config-server:
+    build:
+      context: ./configServer
+      dockerfile: Dockerfile
+    container_name: configServer-container
+    ports:
+      - "8888:8888"
+    networks:
+      - app-network
+
+  orders:
+    build:
+      context: ./orders
+      dockerfile: Dockerfile
+    container_name: order-container
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+    networks:
+      - app-network
+    depends_on:
+      config-server:
+        condition: service_started
+      orders-mysql:
+        condition: service_healthy
+
+  orders-mysql:
+    image: mysql:latest
+    container_name: mysql-orders-container
+    environment:
+      MYSQL_ROOT_PASSWORD: alexander
+      MYSQL_DATABASE: ordersDB
+    ports:
+      - "3307:3306"
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  app-network:
+    driver: bridge

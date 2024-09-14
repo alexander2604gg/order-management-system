@@ -11,12 +11,26 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(path="/api/inventory")
 public class InventoryController {
 
     @Autowired
     private IInventoryService inventoryService;
+
+    @PostMapping("/by-product-ids")
+    public ResponseEntity<List<InventoryResponseDTO>> findInventoryByProductIds(@RequestBody List<Long> productIds) {
+        List<InventoryResponseDTO> inventories = inventoryService.findInventoryByProductIds(productIds);
+
+        if (inventories.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(inventories);
+    }
+
 
     @PostMapping("/create")
     public ResponseEntity<ResponseDTO> createInventory (@RequestBody InventoryRequestDTO inventoryRequestDTO){
@@ -47,5 +61,7 @@ public class InventoryController {
 
         }
     }
+
+
 
 }

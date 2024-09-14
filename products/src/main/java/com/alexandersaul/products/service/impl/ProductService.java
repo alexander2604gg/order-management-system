@@ -30,8 +30,28 @@ public class ProductService implements IProductService {
 
 
     @Override
-    public List<ProductResponseDTO> getProductByCategoryId(Long categoryId) {
-        List<Product> products = (List<Product>) productRepository.findProductsByCategoryId(categoryId);
+    public List<ProductResponseDTO> getAllProducts() {
+        List<Product> products = (List<Product>) productRepository.findAll();
+        return productMapper.toDTOs(products);
+    }
+
+    @Override
+    public ProductResponseDTO getProductById(Long productId) {
+        Product product = productRepository.findById(productId).orElseThrow(
+                () -> new ResourceNotFoundException("Product" , "productId" , productId.toString())
+        );
+        return productMapper.toDTO(product);
+    }
+
+    @Override
+    public List<ProductResponseDTO> getProductsByBrandId(Long brandId) {
+        List <Product> products = productRepository.findProductsByBrandId(brandId);
+        return productMapper.toDTOs(products);
+    }
+
+    @Override
+    public List<ProductResponseDTO> getProductsByCategoryId(Long categoryId) {
+        List<Product> products = productRepository.findProductsByCategoryId(categoryId);
         return productMapper.toDTOs(products);
     }
 

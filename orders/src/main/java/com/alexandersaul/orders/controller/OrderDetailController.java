@@ -5,10 +5,14 @@ import com.alexandersaul.orders.constants.OrderDetailConstants;
 import com.alexandersaul.orders.dto.ResponseDTO;
 import com.alexandersaul.orders.dto.orderdetail.OrderDetailRequestDTO;
 import com.alexandersaul.orders.service.impl.OrderDetailService;
+import com.netflix.discovery.DiscoveryClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 

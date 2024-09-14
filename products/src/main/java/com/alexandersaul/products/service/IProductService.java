@@ -7,7 +7,10 @@ import java.util.List;
 
 public interface IProductService {
 
-    List<ProductResponseDTO> getProductByCategoryId (Long categoryId);
+    List<ProductResponseDTO> getAllProducts ();
+    ProductResponseDTO getProductById (Long productId);
+    List<ProductResponseDTO> getProductsByBrandId (Long brandId);
+    List<ProductResponseDTO> getProductsByCategoryId (Long categoryId);
     void createProduct (ProductRequestDTO productRequestDTO);
     void updateProduct (Long id , ProductRequestDTO productRequestDTO);
     boolean deleteProduct (Long id);

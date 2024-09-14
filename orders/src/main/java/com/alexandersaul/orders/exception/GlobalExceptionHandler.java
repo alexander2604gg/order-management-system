@@ -38,4 +38,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorResponseDTO,HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(StockNotEnoughException.class)
+    public ResponseEntity<ErrorResponseDTO> handleStockNotEnoughException (StockNotEnoughException exception,
+                                                                            WebRequest webRequest) {
+        ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(
+                webRequest.getDescription(false),
+                HttpStatus.CONFLICT,
+                exception.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponseDTO,HttpStatus.CONFLICT);
+    }
+
 }
