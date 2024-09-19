@@ -30,7 +30,7 @@ public class BrandController {
                .body(brandResponseDTOS);
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<ResponseDTO> createBrand (@RequestBody BrandRequestDTO brandRequestDTO){
         brandService.createBrand(brandRequestDTO);
         return ResponseEntity
@@ -38,7 +38,7 @@ public class BrandController {
                 .body(new ResponseDTO(BrandConstants.STATUS_201 , BrandConstants.MESSAGE_201));
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<ResponseDTO> updateBrand (@PathVariable Long id,  @RequestBody BrandRequestDTO brandRequestDTO){
         brandService.updateBrand(id,brandRequestDTO);
         return ResponseEntity
@@ -46,7 +46,7 @@ public class BrandController {
                 .body(new ResponseDTO(BrandConstants.STATUS_200 , BrandConstants.MESSAGE_200));
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<ResponseDTO> deleteCategory (@PathVariable Long id){
 
         boolean isDeleted = brandService.deleteBrand(id);
@@ -61,7 +61,4 @@ public class BrandController {
         }
 
     }
-
-
-
 }

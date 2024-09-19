@@ -20,9 +20,9 @@ public class InventoryMovementController {
     @Autowired
     private IInventoryMovementService inventoryMovementService;
 
-    @PostMapping("/create")
-    public ResponseEntity<ResponseDTO> createInventoryMovement (@RequestBody InventoryMovementRequestDTO inventoryMovementRequestDTO) {
-        inventoryMovementService.createMovementInventory(inventoryMovementRequestDTO);
+    @PostMapping
+    public ResponseEntity<ResponseDTO> createInventoryMovements (@RequestBody List<InventoryMovementRequestDTO> inventoryMovementRequestDTO) {
+        inventoryMovementService.createMovementsInventory(inventoryMovementRequestDTO);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(new ResponseDTO(InventoryConstants.STATUS_201 , InventoryConstants.MESSAGE_201));

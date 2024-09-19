@@ -20,7 +20,7 @@ public class CategoryController {
     @Autowired
     private ICategoryService categoryService;
 
-    @GetMapping("/resource")
+    @GetMapping
     public ResponseEntity<List<CategoryResponseDTO>> getCategories () {
         List<CategoryResponseDTO> categoryResponseDTOS = categoryService.getCategories();
         return ResponseEntity
@@ -28,7 +28,7 @@ public class CategoryController {
                 .body(categoryResponseDTOS);
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<ResponseDTO> createCategory (@RequestBody CategoryRequestDTO categoryRequestDTO){
         categoryService.createCategory(categoryRequestDTO);
         return ResponseEntity
@@ -36,7 +36,7 @@ public class CategoryController {
                 .body(new ResponseDTO(CategoryConstants.STATUS_201 , CategoryConstants.MESSAGE_201));
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<ResponseDTO> updateCategory (@PathVariable Long id,  @RequestBody CategoryRequestDTO categoryRequestDTO){
         categoryService.updateCategory(id,categoryRequestDTO);
         return ResponseEntity
@@ -44,10 +44,10 @@ public class CategoryController {
                 .body(new ResponseDTO(CategoryConstants.STATUS_200 , CategoryConstants.MESSAGE_200));
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<ResponseDTO> deleteCategory (@PathVariable Long id){
 
-        Boolean isDeleted = categoryService.deleteCategory(id);
+        boolean isDeleted = categoryService.deleteCategory(id);
         if (isDeleted){
             return ResponseEntity
                     .status(HttpStatus.OK)

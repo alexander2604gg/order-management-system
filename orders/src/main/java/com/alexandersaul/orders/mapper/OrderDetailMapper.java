@@ -15,7 +15,6 @@ public interface OrderDetailMapper {
     @Mapping(target = "orderDetailId", ignore = true)
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "order.orderId", source = "orderId")
     OrderDetail toEntity (OrderDetailRequestDTO orderDetailRequestDTO);
     List<OrderDetail> toEntityList (List<OrderDetailRequestDTO> orderDetailRequestDTOList);
 

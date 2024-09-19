@@ -72,18 +72,4 @@ public class ProductController {
                 .body(new ResponseDTO(ProductConstants.STATUS_200 , ProductConstants.MESSAGE_200));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseDTO> deleteProduct (@PathVariable @NotNull @Positive Long id){
-        boolean isDeleted = productService.deleteProduct(id);
-        if (isDeleted){
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(new ResponseDTO(ProductConstants.STATUS_200,ProductConstants.MESSAGE_200));
-        } else {
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseDTO(ProductConstants.STATUS_500,ProductConstants.MESSAGE_500_DELETE));
-        }
-
-    }
 }

@@ -31,8 +31,7 @@ public class InventoryController {
         return ResponseEntity.ok(inventories);
     }
 
-
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<ResponseDTO> createInventory (@RequestBody InventoryRequestDTO inventoryRequestDTO){
         inventoryService.createInventory(inventoryRequestDTO);
         return ResponseEntity
@@ -48,18 +47,12 @@ public class InventoryController {
                 .body(inventoryResponseDTO);
     }
 
-    @DeleteMapping("delete/{productId}")
-    public ResponseEntity<ResponseDTO> deleteInventoryByProductId (@PathVariable Long productId) {
-        boolean isDeleted = inventoryService.deleteInventoryByProductId(productId);
-        if (isDeleted){
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ResponseDTO(InventoryConstants.STATUS_200 , InventoryConstants.MESSAGE_200));
-        } else {
-            return ResponseEntity.
-                    status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseDTO(InventoryConstants.STATUS_500 , InventoryConstants.MESSAGE_500_DELETE));
+    @DeleteMapping("/{productId}")
+        public ResponseEntity<ResponseDTO> deleteInventoryByProductId (@PathVariable Long productId) {
+        inventoryService.deleteInventoryByProductId(productId);
 
-        }
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseDTO(InventoryConstants.STATUS_200 , InventoryConstants.MESSAGE_200));
     }
 
 

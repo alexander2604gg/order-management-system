@@ -6,6 +6,7 @@ import com.example.inventory.dto.inventory.InventoryResponseDTO;
 import com.example.inventory.entity.Inventory;
 import com.example.inventory.exceptions.ConflictException;
 import com.example.inventory.exceptions.InsufficientInventoryException;
+import com.example.inventory.exceptions.InventoryNotAllowedToDeleteException;
 import com.example.inventory.exceptions.ResourceNotFoundException;
 import com.example.inventory.mapper.InventoryMapper;
 import com.example.inventory.repository.InventoryRepository;
@@ -47,9 +48,7 @@ public class InventoryService implements IInventoryService {
                 () -> new ResourceNotFoundException("Inventory" , "productId" , productId.toString())
         );
 
-        InventoryResponseDTO inventoryResponseDTO = inventoryMapper.toResponseDTO(inventory);
-
-        return inventoryResponseDTO;
+        return inventoryMapper.toResponseDTO(inventory);
 
     }
 
@@ -80,12 +79,15 @@ public class InventoryService implements IInventoryService {
     }
 
     @Override
-    public boolean deleteInventoryByProductId(Long productId) {
+    public void deleteInventoryByProductId(Long productId) {
         Inventory inventory = inventoryRepository.findByProductId(productId).orElseThrow(
                 () -> new ResourceNotFoundException("Inventory" , "productId" , productId.toString())
         );
-        inventoryRepository.delete(inventory);
-        return true;
+        if (inventory.getQuantity()==0) {
+            inventoryRepository.delete(inventory);
+        } else{
+            throw new InventoryNotAllowedToDeleteException(productId.toString());
+        }
     }
 
     @Override

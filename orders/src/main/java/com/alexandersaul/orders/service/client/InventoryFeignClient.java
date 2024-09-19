@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-@FeignClient("inventory")
+@FeignClient(name = "inventory", contextId = "inventoryFeignClient")
 public interface InventoryFeignClient {
 
     @GetMapping(value = "/api/inventory/findInventory/{productId}" , consumes = "application/json")

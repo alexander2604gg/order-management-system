@@ -50,4 +50,54 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorResponseDTO,HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(PaymentProcessFailedException.class)
+    public ResponseEntity<ErrorResponseDTO> handlePaymentProcessFailedException (PaymentProcessFailedException exception,
+                                                                                 WebRequest webRequest) {
+        ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(
+                webRequest.getDescription(false),
+                HttpStatus.PROCESSING,
+                exception.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponseDTO,HttpStatus.PROCESSING);
+    }
+
+    @ExceptionHandler(NotValidArgumentForPaymentException.class)
+    public ResponseEntity<ErrorResponseDTO> handleNotValidArgumentForPaymentException (NotValidArgumentForPaymentException exception,
+                                                                                       WebRequest webRequest) {
+        ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(
+                webRequest.getDescription(false),
+                HttpStatus.BAD_REQUEST,
+                exception.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponseDTO , HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NotReturnedDataException.class)
+    public ResponseEntity<ErrorResponseDTO> handleNotReturnedDataException (NotReturnedDataException exception,
+                                                                            WebRequest webRequest) {
+        ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(
+                webRequest.getDescription(false),
+                HttpStatus.FAILED_DEPENDENCY,
+                exception.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponseDTO,HttpStatus.FAILED_DEPENDENCY);
+
+    }
+
+    @ExceptionHandler(OrderDetailNotAllowedToDeleteException.class)
+    public ResponseEntity<ErrorResponseDTO> handleOrderDetailNotAllowedToDeleteException (OrderDetailNotAllowedToDeleteException exception,
+                                                                                          WebRequest webRequest) {
+        ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(
+                webRequest.getDescription(false),
+                HttpStatus.BAD_REQUEST,
+                exception.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponseDTO,HttpStatus.BAD_REQUEST);
+    }
+
+
 }

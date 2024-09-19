@@ -10,7 +10,7 @@
         <module name="eureka-server" />
         <module name="configServer" />
       </profile>
-      <profile name="Annotation profile for inventory" enabled="true">
+      <profile name="Annotation profile for products" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />

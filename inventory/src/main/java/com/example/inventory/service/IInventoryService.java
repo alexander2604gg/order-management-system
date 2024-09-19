@@ -13,7 +13,7 @@ public interface IInventoryService {
     void createInventory(InventoryRequestDTO inventoryRequestDTO);
     InventoryResponseDTO findByProductId (Long productId);
     Inventory updateQuantity (Long productId , int quantity , MovementType movementType);
-    boolean deleteInventoryByProductId (Long productId);
+    void deleteInventoryByProductId (Long productId);
     List<InventoryResponseDTO> findInventoryByProductIds (List<Long> ids);
 
 }

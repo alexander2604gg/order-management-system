@@ -58,12 +58,20 @@ public class InventoryMovementService implements IInventoryMovementService {
     }
 
     @Override
+    public void createMovementsInventory(List<InventoryMovementRequestDTO> inventoryMovementRequestDTOS) {
+
+        for (InventoryMovementRequestDTO movement : inventoryMovementRequestDTOS) {
+            createMovementInventory(movement);
+        }
+
+    }
+
+    @Override
     public List<InventoryMovementHistoryDTO> getHistoryByProductId (Long productId) {
         List<InventoryMovement> inventoryMovements = inventoryMovementRepository.findInventoryMovementsByProductId(productId);
 
         if (inventoryMovements != null && !inventoryMovements.isEmpty()){
-            List<InventoryMovementHistoryDTO> historyDTOS = inventoryMovementMapper.toDTOs(inventoryMovements);
-            return historyDTOS;
+            return inventoryMovementMapper.toDTOs(inventoryMovements);
         } else {
             throw new ResourceNotFoundException("InventoryMovement" , "productId" , productId.toString());
         }

@@ -8,6 +8,7 @@ import java.util.List;
 public interface IInventoryMovementService {
 
     void createMovementInventory (InventoryMovementRequestDTO inventoryMovementRequestDTO);
+    void createMovementsInventory (List<InventoryMovementRequestDTO> inventoryMovementRequestDTOS);
     List<InventoryMovementHistoryDTO> getHistoryByProductId (Long productId);
 
 }
