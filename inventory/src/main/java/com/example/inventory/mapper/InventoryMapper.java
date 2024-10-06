@@ -14,5 +14,4 @@ public interface InventoryMapper {
     Inventory toEntity (InventoryRequestDTO inventoryRequestDTO);
     InventoryResponseDTO toResponseDTO (Inventory inventory);
     List<InventoryResponseDTO> toListResponseDTO (List<Inventory> inventories);
-
 }

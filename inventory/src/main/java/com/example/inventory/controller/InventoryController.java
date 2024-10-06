@@ -2,10 +2,13 @@ package com.example.inventory.controller;
 
 import com.example.inventory.constants.InventoryConstants;
 import com.example.inventory.dto.ResponseDTO;
+import com.example.inventory.dto.inventory.InventoryInfoDTO;
 import com.example.inventory.dto.inventory.InventoryRequestDTO;
 import com.example.inventory.dto.inventory.InventoryResponseDTO;
 import com.example.inventory.service.IInventoryService;
 import com.example.inventory.service.impl.InventoryService;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,12 +43,13 @@ public class InventoryController {
     }
 
     @GetMapping("/findInventory/{productId}")
-    public ResponseEntity<InventoryResponseDTO> getInventoryByProductId (@PathVariable Long productId){
-        InventoryResponseDTO inventoryResponseDTO = inventoryService.findByProductId(productId);
+    public ResponseEntity<InventoryInfoDTO> getInventoryByProductId (@PathVariable @NotNull @Positive Long productId){
+        InventoryInfoDTO inventoryInfoDTO = inventoryService.getInfoByProductId(productId);
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(inventoryResponseDTO);
+                .body(inventoryInfoDTO);
     }
+
 
     @DeleteMapping("/{productId}")
         public ResponseEntity<ResponseDTO> deleteInventoryByProductId (@PathVariable Long productId) {

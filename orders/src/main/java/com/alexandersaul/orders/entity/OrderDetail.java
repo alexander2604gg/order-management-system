@@ -12,7 +12,7 @@ import java.util.UUID;
 public class OrderDetail extends BaseEntity{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderDetailId;
     @ManyToOne
     @JoinColumn(name = "order_id")

@@ -1,6 +1,7 @@
 package com.example.inventory.service.impl;
 
 import com.example.inventory.constants.MovementType;
+import com.example.inventory.dto.inventory.InventoryInfoDTO;
 import com.example.inventory.dto.inventory.InventoryRequestDTO;
 import com.example.inventory.dto.inventory.InventoryResponseDTO;
 import com.example.inventory.entity.Inventory;
@@ -11,11 +12,13 @@ import com.example.inventory.exceptions.ResourceNotFoundException;
 import com.example.inventory.mapper.InventoryMapper;
 import com.example.inventory.repository.InventoryRepository;
 import com.example.inventory.service.IInventoryService;
+import com.example.inventory.service.client.ProductFeignClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -25,6 +28,8 @@ public class InventoryService implements IInventoryService {
     private InventoryRepository inventoryRepository;
     @Autowired
     private InventoryMapper inventoryMapper;
+    @Autowired
+    private ProductFeignClient productFeignClient;
 
     @Override
     public void createInventory(InventoryRequestDTO inventoryRequestDTO) {
@@ -33,11 +38,9 @@ public class InventoryService implements IInventoryService {
         if (existingInventory.isPresent()) {
             throw new ConflictException("An inventory record already exists for the product with ID: " + inventoryRequestDTO.getProductId());
         }
-
         Inventory inventory = inventoryMapper.toEntity(inventoryRequestDTO);
         inventory.setQuantity(0);
         inventory.setLastUpdated(LocalDateTime.now());
-
         inventoryRepository.save(inventory);
     }
 
@@ -50,6 +53,19 @@ public class InventoryService implements IInventoryService {
 
         return inventoryMapper.toResponseDTO(inventory);
 
+    }
+
+    @Override
+    public InventoryInfoDTO getInfoByProductId(Long productId) {
+
+        Inventory inventory = inventoryRepository.findByProductId(productId).orElseThrow(
+                () -> new ResourceNotFoundException("Inventory" , "productId" , productId.toString())
+        );
+
+        String name = Objects.requireNonNull(productFeignClient.getNameProductByProductId(
+                        inventory.getProductId()).getBody()).getName();
+
+        return new InventoryInfoDTO(inventory.getProductId(), name,inventory.getQuantity());
     }
 
 

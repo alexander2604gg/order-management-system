@@ -13,7 +13,7 @@ import java.util.List;
 @FeignClient(name = "inventory", contextId = "inventoryMovementFeignClient")
 public interface InventoryMovementFeignClient {
 
-    @PostMapping("/api/inventoryMovement/create")
-    public ResponseEntity<ResponseDTO> createInventoryMovements (@RequestBody List<InventoryMovementRequestDTO> inventoryMovementRequestDTOS);
+    @PostMapping("/api/inventoryMovement")
+    ResponseEntity<ResponseDTO> createInventoryMovements (@RequestBody List<InventoryMovementRequestDTO> inventoryMovementRequestDTOS);
 
 }

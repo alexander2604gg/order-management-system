@@ -1,6 +1,7 @@
 package com.alexandersaul.orders.mapper;
 
 import com.alexandersaul.orders.dto.orderdetail.OrderDetailRequestDTO;
+import com.alexandersaul.orders.dto.orderdetail.OrderDetailResponseDTO;
 import com.alexandersaul.orders.entity.OrderDetail;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -17,5 +18,6 @@ public interface OrderDetailMapper {
     @Mapping(target = "createdAt", ignore = true)
     OrderDetail toEntity (OrderDetailRequestDTO orderDetailRequestDTO);
     List<OrderDetail> toEntityList (List<OrderDetailRequestDTO> orderDetailRequestDTOList);
-
+    OrderDetailResponseDTO toDto (OrderDetail orderDetail);
+    List<OrderDetailResponseDTO> toDtoList (List<OrderDetail> orderDetails);
 }

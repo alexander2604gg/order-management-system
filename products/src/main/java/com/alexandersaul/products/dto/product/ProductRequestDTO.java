@@ -29,5 +29,4 @@ public class ProductRequestDTO {
     @Positive(message = "Brand ID must be a positive number")
     private Long brandId;
 
-    // Getters and Setters
 }

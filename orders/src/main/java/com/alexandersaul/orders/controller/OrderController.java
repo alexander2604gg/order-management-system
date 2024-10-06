@@ -3,8 +3,10 @@ package com.alexandersaul.orders.controller;
 import com.alexandersaul.orders.constants.OrderConstants;
 import com.alexandersaul.orders.dto.ResponseDTO;
 import com.alexandersaul.orders.dto.order.OrderRequestDTO;
+import com.alexandersaul.orders.dto.order.OrderResponseDTO;
 import com.alexandersaul.orders.dto.order.UpdateOrderStatusDTO;
 import com.alexandersaul.orders.dto.orderdetail.OrderDetailRequestDTO;
+import com.alexandersaul.orders.dto.orderdetail.OrderDetailResponseDTO;
 import com.alexandersaul.orders.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,12 +22,35 @@ public class OrderController {
     @Autowired
     private IOrderService orderService;
 
+    @GetMapping
+    public ResponseEntity<List<OrderResponseDTO>> getAllOrders () {
+        List<OrderResponseDTO> orderResponseDTOS = orderService.getAllOrders();
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(orderResponseDTOS);
+    }
+
+    @GetMapping("/findOrder/{orderId}")
+    public ResponseEntity<OrderResponseDTO> findOrder (@PathVariable Long orderId) {
+        OrderResponseDTO orderResponseDTO = orderService.findOrderById(orderId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(orderResponseDTO);
+    }
+
+    @GetMapping("/findDetails")
+    public ResponseEntity<List<OrderDetailResponseDTO>> getAllDetails (@RequestParam Long orderId) {
+        List<OrderDetailResponseDTO> orderDetails = orderService.getOrderDetails(orderId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(orderDetails);
+    }
     @PostMapping
-    public ResponseEntity<ResponseDTO> createOrder(@RequestBody OrderRequestDTO orderRequestDTO) {
-        orderService.createOrder(orderRequestDTO);
+    public ResponseEntity<OrderResponseDTO> createOrder(@RequestBody OrderRequestDTO orderRequestDTO) {
+        OrderResponseDTO orderResponseDTO = orderService.createOrder(orderRequestDTO);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(new ResponseDTO(OrderConstants.STATUS_201, OrderConstants.MESSAGE_201));
+                .body(orderResponseDTO);
     }
 
     @PostMapping("/{orderId}/details")

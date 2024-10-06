@@ -3,6 +3,8 @@ package com.alexandersaul.products.controller;
 import com.alexandersaul.products.constants.ProductConstants;
 import com.alexandersaul.products.dto.ResponseDTO;
 import com.alexandersaul.products.dto.category.CategoryResponseDTO;
+import com.alexandersaul.products.dto.product.ProductEditPriceDTO;
+import com.alexandersaul.products.dto.product.ProductNameResponseDTO;
 import com.alexandersaul.products.dto.product.ProductRequestDTO;
 import com.alexandersaul.products.dto.product.ProductResponseDTO;
 import com.alexandersaul.products.service.IProductService;
@@ -32,7 +34,7 @@ public class ProductController {
                 .body(productResponseDTOS);
     }
 
-    @GetMapping("/{productId}")
+    @GetMapping("search/{productId}")
     public ResponseEntity<ProductResponseDTO> getProductById (@PathVariable @NotNull @Positive Long productId) {
         ProductResponseDTO productResponseDTO = productService.getProductById(productId);
         return ResponseEntity
@@ -56,6 +58,15 @@ public class ProductController {
                 .body(productResponseDTOS);
     }
 
+    @GetMapping("/search-name/{productId}")
+    public ResponseEntity<ProductNameResponseDTO> getNameProductByProductId (@PathVariable @NotNull @Positive Long productId) {
+        ProductNameResponseDTO productNameResponseDTO = productService.getProductNameByProductId(productId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(productNameResponseDTO);
+    }
+
+
     @PostMapping
     public ResponseEntity<ResponseDTO> createProduct (@Valid @RequestBody ProductRequestDTO productRequestDTO) {
         productService.createProduct(productRequestDTO);
@@ -67,6 +78,14 @@ public class ProductController {
     @PutMapping("/{id}")
     public ResponseEntity<ResponseDTO> updateProduct (@PathVariable @NotNull @Positive Long id , @RequestBody ProductRequestDTO productRequestDTO) {
         productService.updateProduct(id , productRequestDTO);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ResponseDTO(ProductConstants.STATUS_200 , ProductConstants.MESSAGE_200));
+    }
+
+    @PatchMapping("editPrice/{productId}")
+    public ResponseEntity<ResponseDTO> updatePrice (@PathVariable @NotNull @Positive Long productId , @RequestBody ProductEditPriceDTO productEditPriceDTO) {
+        productService.editPrice(productId , productEditPriceDTO);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new ResponseDTO(ProductConstants.STATUS_200 , ProductConstants.MESSAGE_200));

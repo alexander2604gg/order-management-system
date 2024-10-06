@@ -2,10 +2,12 @@ package com.alexandersaul.orders.service.impl;
 
 import com.alexandersaul.orders.constants.OrderStatus;
 import com.alexandersaul.orders.dto.InventoryMovementRequestDTO;
+import com.alexandersaul.orders.dto.ProductNameResponseDTO;
 import com.alexandersaul.orders.dto.ResponseDTO;
 import com.alexandersaul.orders.dto.inventory.InventoryResponseDTO;
 import com.alexandersaul.orders.dto.order.OrderResponseDTO;
 import com.alexandersaul.orders.dto.orderdetail.OrderDetailRequestDTO;
+import com.alexandersaul.orders.dto.orderdetail.OrderDetailResponseDTO;
 import com.alexandersaul.orders.entity.Order;
 import com.alexandersaul.orders.entity.OrderDetail;
 import com.alexandersaul.orders.exception.NotReturnedDataException;
@@ -17,6 +19,7 @@ import com.alexandersaul.orders.repository.OrderDetailRepository;
 import com.alexandersaul.orders.service.IOrderDetailService;
 import com.alexandersaul.orders.service.client.InventoryFeignClient;
 import com.alexandersaul.orders.service.client.InventoryMovementFeignClient;
+import com.alexandersaul.orders.service.client.ProductFeignClient;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +38,24 @@ public class OrderDetailService implements IOrderDetailService {
     private InventoryFeignClient inventoryFeignClient;
     @Autowired
     private InventoryMovementFeignClient inventoryMovementFeignClient;
+    @Autowired
+    private ProductFeignClient productFeignClient;
+
+
+    @Override
+    public List<OrderDetailResponseDTO> getOrderDetails(Order order) {
+        List<OrderDetail> orderDetails = orderDetailRepository.findByOrder(order);
+
+        List<OrderDetailResponseDTO> orderDetailDtos = orderDetailMapper.toDtoList(orderDetails);
+
+        for (OrderDetailResponseDTO dto : orderDetailDtos) {
+            ProductNameResponseDTO productName = productFeignClient.getNameProductByProductId(dto.getProductId()).getBody();
+            assert productName != null;
+            dto.setProductName(productName.getName());
+        }
+
+        return orderDetailDtos;
+    }
 
 
     @Override
@@ -79,10 +100,11 @@ public class OrderDetailService implements IOrderDetailService {
     }
 
     private List<InventoryResponseDTO> getInventoryData(List<OrderDetail> orderDetails) {
+
         ResponseEntity<List<InventoryResponseDTO>> response = inventoryFeignClient.findInventoryByProductIds(
                 orderDetails.stream().map(OrderDetail::getProductId).toList()
         );
-        System.out.println(response);
+
         if (!response.getStatusCode().is2xxSuccessful() || response.getBody() == null) {
             throw new NotReturnedDataException("Inventory response ");
         }
@@ -91,7 +113,7 @@ public class OrderDetailService implements IOrderDetailService {
     }
 
     private boolean updateInventory(List<InventoryMovementRequestDTO> inventoryMovements) {
-        System.out.println(inventoryMovements);
+
         ResponseEntity<ResponseDTO> response = inventoryMovementFeignClient.createInventoryMovements(inventoryMovements);
 
         System.out.println(response);
@@ -115,7 +137,7 @@ public class OrderDetailService implements IOrderDetailService {
 
             InventoryMovementRequestDTO movementRequest = InventoryMovementRequestDTO.builder()
                     .productId(productId)
-                    .movementType("INCOMING")
+                    .movementType("OUTGOING")
                     .quantity(requestedQuantity)
                     .reason("Sell")
                     .build();

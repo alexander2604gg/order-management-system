@@ -1,5 +1,7 @@
 package com.alexandersaul.products.service.impl;
 
+import com.alexandersaul.products.dto.product.ProductEditPriceDTO;
+import com.alexandersaul.products.dto.product.ProductNameResponseDTO;
 import com.alexandersaul.products.dto.product.ProductRequestDTO;
 import com.alexandersaul.products.dto.product.ProductResponseDTO;
 import com.alexandersaul.products.entity.Brand;
@@ -46,6 +48,7 @@ public class ProductService implements IProductService {
     @Override
     public List<ProductResponseDTO> getProductsByBrandId(Long brandId) {
         List <Product> products = productRepository.findProductsByBrandId(brandId);
+        System.out.println(products);
         return productMapper.toDTOs(products);
     }
 
@@ -95,6 +98,27 @@ public class ProductService implements IProductService {
         );
         productRepository.deleteById(product.getProductId());
         return true;
+    }
+
+    @Override
+    public ProductNameResponseDTO getProductNameByProductId(Long productId) {
+        Product product = productRepository.findById(productId).orElseThrow(
+                () -> new ResourceNotFoundException("Product" , "productId" , productId.toString())
+        );
+        return productMapper.toDTOName(product);
+    }
+
+    @Override
+    public void editPrice(Long productId , ProductEditPriceDTO productEditPriceDTO) {
+        Product product = productRepository.findById(productId).orElseThrow(
+                () -> new ResourceNotFoundException("Product", "productId" , productId.toString())
+        );
+
+        product.setUpdatedAt(LocalDateTime.now());
+        product.setUpdatedBy("Alexander");
+        product.setPrice(productEditPriceDTO.getPrice());
+        productRepository.save(product);
+
     }
 
 }

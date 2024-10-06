@@ -1,4 +1,4 @@
-package com.example.inventory.dto.inventoryMovement;
+package com.example.inventory.dto.inventory;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,9 +9,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class InventoryMovementRequestDTO {
+public class InventoryInfoDTO {
     private Long productId;
-    private String movementType;
-    private int quantity;
-    private String reason;
+    private String name;
+    private int stock;
 }

@@ -6,6 +6,8 @@ import com.alexandersaul.orders.entity.Order;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface OrderMapper {
 
@@ -18,5 +20,6 @@ public interface OrderMapper {
     @Mapping(target = "status", ignore = true)
     Order toEntity (OrderRequestDTO orderRequestDTO);
     OrderResponseDTO toDTO (Order order);
+    List<OrderResponseDTO> toDtoList (List<Order> orders);
 
 }

@@ -1,5 +1,7 @@
 package com.alexandersaul.products.mapper;
 
+import com.alexandersaul.products.dto.product.ProductEditPriceDTO;
+import com.alexandersaul.products.dto.product.ProductNameResponseDTO;
 import com.alexandersaul.products.dto.product.ProductRequestDTO;
 import com.alexandersaul.products.dto.product.ProductResponseDTO;
 import com.alexandersaul.products.entity.Product;
@@ -19,6 +21,6 @@ public interface ProductMapper {
     Product toEntity (ProductRequestDTO productRequestDTO);
     ProductResponseDTO toDTO (Product product);
     List<ProductResponseDTO> toDTOs (List<Product> products);
-
+    ProductNameResponseDTO toDTOName (Product product);
 
 }

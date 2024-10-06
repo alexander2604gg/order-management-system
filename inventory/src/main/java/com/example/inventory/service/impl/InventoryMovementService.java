@@ -1,8 +1,11 @@
 package com.example.inventory.service.impl;
 
 import com.example.inventory.constants.MovementType;
+import com.example.inventory.dto.inventory.InventoryRequestDTO;
+import com.example.inventory.dto.inventory.InventoryResponseDTO;
 import com.example.inventory.dto.inventoryMovement.InventoryMovementHistoryDTO;
 import com.example.inventory.dto.inventoryMovement.InventoryMovementRequestDTO;
+import com.example.inventory.dto.product.ProductResponseDTO;
 import com.example.inventory.entity.Inventory;
 import com.example.inventory.entity.InventoryMovement;
 import com.example.inventory.exceptions.InvalidMovementTypeException;
@@ -13,11 +16,14 @@ import com.example.inventory.repository.InventoryMovementRepository;
 import com.example.inventory.repository.InventoryRepository;
 import com.example.inventory.service.IInventoryMovementService;
 import com.example.inventory.service.IInventoryService;
+import com.example.inventory.service.client.ProductFeignClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class InventoryMovementService implements IInventoryMovementService {
@@ -30,6 +36,8 @@ public class InventoryMovementService implements IInventoryMovementService {
     private IInventoryService inventoryService;
     @Autowired
     private InventoryRepository inventoryRepository;
+    @Autowired
+    private ProductFeignClient productFeignClient;
 
     @Override
     public void createMovementInventory(InventoryMovementRequestDTO inventoryMovementRequestDTO) {
@@ -39,6 +47,27 @@ public class InventoryMovementService implements IInventoryMovementService {
             movementType = MovementType.valueOf(inventoryMovementRequestDTO.getMovementType());
         } catch (IllegalArgumentException e) {
             throw new InvalidMovementTypeException("Invalid movement type: " + inventoryMovementRequestDTO.getMovementType());
+        }
+
+        if (movementType == MovementType.INCOMING) {
+            inventoryRepository.findByProductId(inventoryMovementRequestDTO.getProductId())
+                    .ifPresentOrElse(
+                            inventory -> {
+
+                            },
+                            () -> {
+                                ResponseEntity<ProductResponseDTO> productResponse =
+                                        productFeignClient.getProductById(inventoryMovementRequestDTO.getProductId());
+
+                                System.out.println(productResponse.getBody());
+                                if (!productResponse.getStatusCode().is2xxSuccessful() || productResponse.getBody() == null) {
+                                    throw new ResourceNotFoundException("Order", "orderId", inventoryMovementRequestDTO.getProductId().toString());
+                                }
+
+                                InventoryRequestDTO inventoryRequestDTO = new InventoryRequestDTO(inventoryMovementRequestDTO.getProductId());
+                                inventoryService.createInventory(inventoryRequestDTO);
+                            }
+                    );
         }
 
         Inventory inventory = inventoryService.updateQuantity(

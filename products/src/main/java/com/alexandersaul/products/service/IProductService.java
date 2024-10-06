@@ -1,5 +1,7 @@
 package com.alexandersaul.products.service;
 
+import com.alexandersaul.products.dto.product.ProductEditPriceDTO;
+import com.alexandersaul.products.dto.product.ProductNameResponseDTO;
 import com.alexandersaul.products.dto.product.ProductRequestDTO;
 import com.alexandersaul.products.dto.product.ProductResponseDTO;
 
@@ -14,5 +16,7 @@ public interface IProductService {
     void createProduct (ProductRequestDTO productRequestDTO);
     void updateProduct (Long id , ProductRequestDTO productRequestDTO);
     boolean deleteProduct (Long id);
+    ProductNameResponseDTO getProductNameByProductId (Long productId);
+    void editPrice (Long productId , ProductEditPriceDTO productEditPriceDTO);
 
 }

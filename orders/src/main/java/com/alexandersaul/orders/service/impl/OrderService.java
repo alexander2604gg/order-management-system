@@ -1,13 +1,16 @@
 package com.alexandersaul.orders.service.impl;
 
 import com.alexandersaul.orders.constants.OrderStatus;
+import com.alexandersaul.orders.dto.order.OrderBoletaDTO;
 import com.alexandersaul.orders.dto.order.OrderRequestDTO;
 import com.alexandersaul.orders.dto.order.OrderResponseDTO;
 import com.alexandersaul.orders.dto.order.UpdateOrderStatusDTO;
 import com.alexandersaul.orders.dto.orderdetail.OrderDetailRequestDTO;
+import com.alexandersaul.orders.dto.orderdetail.OrderDetailResponseDTO;
 import com.alexandersaul.orders.entity.Order;
 import com.alexandersaul.orders.entity.OrderDetail;
 import com.alexandersaul.orders.exception.*;
+import com.alexandersaul.orders.mapper.OrderDetailMapper;
 import com.alexandersaul.orders.mapper.OrderMapper;
 import com.alexandersaul.orders.repository.OrderRepository;
 import com.alexandersaul.orders.service.IOrderService;
@@ -31,15 +34,55 @@ public class OrderService implements IOrderService {
     private OrderMapper orderMapper;
     @Autowired
     private OrderDetailService orderDetailService;
+    @Autowired
+    private OrderDetailMapper orderDetailMapper;
 
     @Override
-    public void createOrder(OrderRequestDTO orderRequestDTO) {
-        Order order = orderMapper.toEntity(orderRequestDTO);
+    public List<OrderResponseDTO> getAllOrders() {
+        List<Order> orders = (List<Order>) orderRepository.findAll();
+        return orderMapper.toDtoList(orders);
+    }
+
+    @Override
+    public List<OrderDetailResponseDTO> getOrderDetails(Long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(
+                () -> new ResourceNotFoundException("Order" , "orderId", orderId.toString())
+        );
+        return orderDetailService.getOrderDetails(order);
+    }
+
+    @Override
+    public OrderResponseDTO findOrderById(Long productId) {
+        Order order = orderRepository.findById(productId).orElseThrow(
+                () -> new ResourceNotFoundException("Order" , "orderId" , productId.toString())
+        );
+        return orderMapper.toDTO(order);
+    }
+
+    @Override
+    public OrderResponseDTO createOrder(OrderRequestDTO orderRequestDTO) {
+        Order order = new Order();
+        order.setUserId(orderRequestDTO.getUserId());
         order.setCreatedBy("Alexander Saul");
         order.setCreatedAt(LocalDateTime.now());
         order.setStatus("PENDING");
-        orderRepository.save(order);
+        Order savedOrder = orderRepository.save(order);
+        addOrderDetail(savedOrder.getOrderId(),orderRequestDTO.getDetails());
+        return orderMapper.toDTO(order);
     }
+
+    @Override
+    public OrderBoletaDTO createBoleta(Long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(
+                () -> new ResourceNotFoundException("Order" , "orderId" , orderId.toString())
+        );
+
+        return OrderBoletaDTO.builder()
+                .orderResponseDTO(orderMapper.toDTO(order))
+                .orderDetailResponseDTOList(orderDetailService.getOrderDetails(order))
+                .build();
+    }
+
 
     @Override
     public OrderResponseDTO findById(Long id) {
@@ -58,7 +101,7 @@ public class OrderService implements IOrderService {
                 () -> new ResourceNotFoundException("Order" , "orderId" , orderId.toString())
         );
         orderDetailService.createOrderDetails(order , orderDetailRequestDTOList);
-        updateTotalAmount(order , calculateTotalAmount(order));
+        updateTotalAmount(order , calculateTotalAmount(orderDetailRequestDTOList));
 
     }
 
@@ -99,7 +142,7 @@ public class OrderService implements IOrderService {
         Order order = orderRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Order" , "orderId" , String.valueOf(id))
         );
-        if (OrderStatus.CANCELED.name().equals(order.getStatus())){
+        if (OrderStatus.PENDING.name().equals(order.getStatus())){
             orderRepository.delete(order);
         } else {
             throw new OrderNotAllowedToDeleteException(order.getStatus());
@@ -115,8 +158,8 @@ public class OrderService implements IOrderService {
         return orderDetailService.processOrderPayment(order.getDetails());
     }
 
-    public BigDecimal calculateTotalAmount (Order order) {
-        return order.getDetails().stream()
+    public BigDecimal calculateTotalAmount (List<OrderDetailRequestDTO> orderDetailRequestDTOList) {
+        return orderDetailRequestDTOList.stream()
                 .map(orderDetail -> orderDetail.getPricePerUnit().multiply(
                         new BigDecimal(orderDetail.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
