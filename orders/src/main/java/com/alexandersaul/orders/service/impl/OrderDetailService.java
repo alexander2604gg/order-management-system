@@ -116,7 +116,7 @@ public class OrderDetailService implements IOrderDetailService {
 
         ResponseEntity<ResponseDTO> response = inventoryMovementFeignClient.createInventoryMovements(inventoryMovements);
 
-        System.out.println(response);
+
         if (!response.getStatusCode().is2xxSuccessful() || response.getBody() == null) {
             throw new NotReturnedDataException("Inventory response ");
         }
@@ -126,7 +126,7 @@ public class OrderDetailService implements IOrderDetailService {
 
     private List<InventoryMovementRequestDTO> createInventoryMovements(List<OrderDetail> orderDetails, List<InventoryResponseDTO> inventoryData) {
         List<InventoryMovementRequestDTO> inventoryMovements = new ArrayList<>();
-
+        
         for (InventoryResponseDTO inventory : inventoryData) {
             Long productId = inventory.getProductId();
             int requestedQuantity = getRequestedQuantity(orderDetails, productId);
@@ -149,6 +149,7 @@ public class OrderDetailService implements IOrderDetailService {
     }
 
     private int getRequestedQuantity(List<OrderDetail> orderDetails, Long productId) {
+
         return orderDetails.stream()
                 .filter(od -> Objects.equals(od.getProductId(), productId))
                 .findFirst()

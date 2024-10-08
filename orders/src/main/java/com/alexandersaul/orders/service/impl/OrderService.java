@@ -34,8 +34,6 @@ public class OrderService implements IOrderService {
     private OrderMapper orderMapper;
     @Autowired
     private OrderDetailService orderDetailService;
-    @Autowired
-    private OrderDetailMapper orderDetailMapper;
 
     @Override
     public List<OrderResponseDTO> getAllOrders() {
@@ -111,6 +109,8 @@ public class OrderService implements IOrderService {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Order", "OrderId", String.valueOf(id)));
 
+        System.out.println(order.getDetails());
+
         OrderStatus currentStatus = OrderStatus.valueOf(order.getStatus());
         OrderStatus newStatus = OrderStatus.valueOf(orderUpdateStatusDTO.getStatus());
 
@@ -155,6 +155,7 @@ public class OrderService implements IOrderService {
     }
 
     public boolean paidOrder(Order order) {
+        System.out.println(order.getDetails());
         return orderDetailService.processOrderPayment(order.getDetails());
     }
 

@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Getter @Setter @ToString @AllArgsConstructor @NoArgsConstructor
+@Getter @Setter @AllArgsConstructor @NoArgsConstructor
 @Table(name = "Orders")
 public class Order extends BaseEntity {
 

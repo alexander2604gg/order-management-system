@@ -108,7 +108,7 @@ public class InventoryService implements IInventoryService {
 
     @Override
     public List<InventoryResponseDTO> findInventoryByProductIds(List<Long> ids) {
-        List<Inventory> inventories = (List<Inventory>) inventoryRepository.findAllById(ids);
+        List<Inventory> inventories = inventoryRepository.findByProductsIds(ids);
         return inventoryMapper.toListResponseDTO(inventories);
     }
 
