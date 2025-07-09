@@ -10,7 +10,7 @@ FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
-COPY --from=build /app/target/configServer-0.0.1-SNAPSHOT.jar /app/configServer-0.0.1-SNAPSHOT.jar
+COPY --from=build /app/target/configServer-0.0.1-SNAPSHOT.jar /app/configServer.jar
 
 EXPOSE 8888
 
