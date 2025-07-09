@@ -11,4 +11,4 @@ spring:
             time_zone: UTC
 
 server:
-  port: 8090
+  port: 8083
