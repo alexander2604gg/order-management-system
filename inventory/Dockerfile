@@ -10,8 +10,8 @@ FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
-COPY --from=build /app/target/orders-0.0.1-SNAPSHOT.jar /app/orders.jar
+COPY --from=build /app/target/inventory-0.0.1-SNAPSHOT.jar /app/inventory.jar
 
-EXPOSE 8082
+EXPOSE 8081
 
-CMD ["java", "-jar", "/app/orders.jar"]
+CMD ["java", "-jar", "/app/inventory.jar"]
