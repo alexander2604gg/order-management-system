@@ -3,6 +3,6 @@ spring:
     name: orders
   cloud:
     config:
-      uri: http://localhost:8888
+      uri: https://order-management-system-1-o9wm.onrender.com
   profiles:
     active: local
