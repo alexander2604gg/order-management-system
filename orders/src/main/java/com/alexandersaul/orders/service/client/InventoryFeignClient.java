@@ -13,7 +13,7 @@ import java.util.List;
 @FeignClient(
     name = "inventory",
     url = "https://order-management-system-3-bix0.onrender.com",
-    contextId = "inventoryFeignClient"
+    contextId = "inventoryFeignClient2"
 )
 public interface InventoryFeignClient {
 
