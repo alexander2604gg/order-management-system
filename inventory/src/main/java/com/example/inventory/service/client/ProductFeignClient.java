@@ -8,12 +8,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "products", contextId = "productsFeignClient")
+@FeignClient(
+    name = "products",
+    url = "https://order-management-system-bxrc.onrender.com",
+    contextId = "productsFeignClient"
+)
 public interface ProductFeignClient {
 
     @GetMapping(value = "/api/products/search-name/{productId}" )
     ResponseEntity<ProductNameResponseDTO> getNameProductByProductId (@PathVariable Long productId);
+
     @GetMapping("api/products/search/{productId}")
     ResponseEntity<ProductResponseDTO> getProductById (@PathVariable Long productId);
 
 }
+
